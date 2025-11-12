@@ -1,0 +1,33 @@
+このファイルは、リポジトリ内のすべてのファイルを含む ZIP を作成し、リリースに添付するための手順を示します。
+
+1) リポジトリをクローン（または既存のローカルコピーを更新）
+   git clone https://github.com/9z2fqjckjv-bot/Web-powerdby-Nanndemoya.git
+   cd Web-powerdby-Nanndemoya
+   git fetch origin
+   git checkout release/v1.0.0
+
+2) ZIP を作成（.git ディレクトリを除外）
+   - Unix/macOS:
+     zip -r Web-powerdby-Nanndemoya-v1.0.0.zip . -x ".git/*"
+   - Windows (PowerShell):
+     Compress-Archive -Path (Get-ChildItem -Path . -Recurse -Force | Where-Object { $_.FullName -notmatch "\\.git\\" }) -DestinationPath Web-powerdby-Nanndemoya-v1.0.0.zip
+
+3) ZIP とリリースノートをブランチに追加して push（任意）
+   git add RELEASE_v1.0.0.md Web-powerdby-Nanndemoya-v1.0.0.zip
+   git commit -m "Add v1.0.0 release notes and v1.0.0 ZIP asset"
+   git push origin release/v1.0.0
+
+4) GitHub ウェブ UI でリリース作成
+   - リポジトリページ → "Releases" → "Draft a new release"
+   - Tag version: v1.0.0
+   - Target: main
+   - Title: v1.0.0
+   - Description: RELEASE_v1.0.0.md の内容を貼る
+   - Attach binaries: Web-powerdby-Nanndemoya-v1.0.0.zip をドラッグ＆ドロップ
+   - Publish release
+
+5) gh CLI で作成する場合（事前に gh auth login）
+   gh release create v1.0.0 Web-powerdby-Nanndemoya-v1.0.0.zip --target main --title "v1.0.0" --notes-file RELEASE_v1.0.0.md
+
+注意:
+- この環境からは ZIP のバイナリを直接作成・添付できない可能性があります。上記手順でローカルに ZIP を作成し、手動でリリースに添付してください.
